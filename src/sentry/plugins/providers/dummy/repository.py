@@ -5,7 +5,10 @@ from sentry.plugins.providers.repository import RepositoryProvider
 
 class DummyRepositoryProvider(RepositoryProvider):
     name = 'Example'
-    has_installations = True
+    auth_provider = 'dummy'
+
+    def needs_auth(self, user, **kwargs):
+        return False
 
     def get_config(self):
         return [{
@@ -32,20 +35,4 @@ class DummyRepositoryProvider(RepositoryProvider):
         }, {
             'id': end_sha,
             'repository': repo.name,
-        }]
-
-    def get_installations(self, user):
-        return [{
-            'app_id': 12345,
-            'installation_id': 54321,
-            'external_id': 987612345,
-            'external_slug': 'dummyorg',
-        }]
-
-    def get_repositories(self, installation):
-        return [{
-            'name': 'dummyorg/dummyrepo',
-            'external_id': 123456,
-            'url': 'https://www.github.com/dummyorg/dummyrepo',
-            'provider': 'dummy',
         }]
